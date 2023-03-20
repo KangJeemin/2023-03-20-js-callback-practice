@@ -14,7 +14,10 @@ function seven(number,append) {
     return number - append
   }
 function eight(number,append,callback) {
-    return callback(number, append);
+  let a =number +1;
+  let b =append +1;
+
+    return callback(a, b);
   }
 console.log(eight(1,2,function(a,b){
   return a+b;
