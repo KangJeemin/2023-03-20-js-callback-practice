@@ -2,7 +2,6 @@ import fs from 'fs'
 import http, { createServer } from 'http'
 import url from 'url'
 
-
 const first = 
 `<!DOCTYPE html>
 <html lang="en">
@@ -13,9 +12,9 @@ const first =
 <title>Document</title>
 </head>
 <body>
-<form action="/login" method="post">
-	<p><input type="text" name="title" placeholder="title"></p>
-	<p><textarea name="content" placeholder="content"></textarea></p>
+<form method="post" action="/login"> 
+	<input type="text" name="title" placeholder="title">
+	<textarea name="content" placeholder="content"></textarea>
 	<input type="submit">
 </form>
 </body>
@@ -24,35 +23,25 @@ const first =
 const server = http.createServer(function(request,response){
 
   if(request.url=="/"){
-  response.statusCode=200;
-  response.setHeader('Contant-Type','text/plain');
-  response.end(first);
-  }
-  
-if(request.method=='post' && request.url=="/login"){
+    response.statusCode=200;
+    response.setHeader('Content-Type','text/html');
+    response.end(first);
+  } else if(request.method=='POST' && request.url=='/login'){
     let body = ""
-    response.end(first)
     request.on('data', (chunk) => {
       body = body + chunk;
-      
     })
     request.on('end', () => {
       console.log(body);
-  response.end();
-
-
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'text/plain');
+      response.end('Data received successfully!');
     });
-   
-   }
-
-  // if(request.method=='GET' && request.url.startsWith('/login')){
-  //   let sub = request.url.split('=')[1];
-  //   let text = request.url.split('=')[2];
-  //   fs.writeFileSync(sub,text);
-
-
-  // }
-  
+  } else {
+    response.statusCode=404;
+    response.setHeader('Content-Type','text/html');
+    response.end('<h1>Page not found!</h1>');
+  }
 })
 
 server.listen(2080, ()=>{
